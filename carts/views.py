@@ -15,12 +15,10 @@ def _cart_id(request):
 def add_cart(request, product_id):
     product = Product.objects.get(id=product_id) # get the product
     product_variation = []
-    
     if request.method == 'POST':
         for item in request.POST:
             key = item
             value = request.POST[key]
-            
             
             try:
                 variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
@@ -39,9 +37,9 @@ def add_cart(request, product_id):
     try:
         cart_item = CartItem.objects.get(product=product, cart=cart)
         if len(product_variation) > 0:
-            cart_item.variation.clear()
+            cart_item.variations.clear()
             for item in product_variation:
-                cart_item.variation.add(item)
+                cart_item.variations.add(item)
                 
             
         cart_item.quantity += 1 # cart_item.quantity = cart_item.quantity + 1

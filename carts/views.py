@@ -51,9 +51,8 @@ def add_cart(request, product_id):
         )
         if len(product_variation) > 0:
             for item in product_variation:
-                cart_item.variation.add(item)
+                cart_item.variations.add(item)
                 
-        
         cart_item.save()
     
     return redirect('cart')

@@ -12,7 +12,31 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['first_name','last_name','email','phone_number','password']
+    
+    def clean (self):
+        cleaned_data = super(RegistrationForm, self).clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
         
+        if password != confirm_password:
+            raise forms.ValidationError(
+                "Password doesn't match!"
+            )
+    
+    # chatgpt code here 
+    # after this below code it's passed
+    # def clean(self):
+    #     cleaned_data = super().clean()  # No need to pass RegistrationForm explicitly
+    #     password = cleaned_data.get('password')
+    #     confirm_password = cleaned_data.get('confirm_password')
+
+    #     if password and confirm_password and password != confirm_password:
+    #         self.add_error('confirm_password', "Password doesn't match!")
+
+    #     return cleaned_data
+   
+    # chatgpt code ended here    
+   
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         self.fields['first_name'].widget.attrs['placeholder'] ='Enter First Name'
@@ -21,3 +45,5 @@ class RegistrationForm(forms.ModelForm):
         self.fields['email'].widget.attrs['placeholder'] ='Enter Email Address'
         for field in self.fields:
             self.fields[field].widget.attrs['class'] ='form-control'
+            
+    
